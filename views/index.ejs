@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<title><%=title%></title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  body,h1,h5 {font-family: "Raleway", sans-serif}
+  body, html {height: 100%}
+  .bgimg {
+    background-image: url('https://images.indianexpress.com/2020/04/Zoom_Reuters_FB-1-1.jpg');
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+</style>
+<body>
+
+<div class="bgimg w3-display-container w3-text-white">
+  <div class="w3-display-topleft w3-jumbo">
+    <b>CalGo</b>
+  </div>
+
+    <div class="w3-display-middle w3-container">
+    <p class="w3-xlarge">Hi, User</p>
+
+      <div class="w3-cell-row">
+
+        <div class="w3-container w3-transparent w3-cell">
+          <form method="GET" action="/host-a-meeting">
+           <input type="submit" class="w3-button w3-blue" value="Host a meeting">
+          </form>
+        </div>
+
+        <div class="w3-container w3-transparent w3-cell">
+         <form method="GET" action="/join-a-meeting">
+          <input type="submit" class="w3-button w3-green" value="Join a meeting">
+         </form>
+        </div>
+
+      </div>
+  </div>
+  <div class="w3-display-topright w3-container w3-xlarge">
+    <button class="w3-button w3-transparent"><i class="fa fa-gear" style="font-size:28px;"></i></button>
+
+  </div>
+</div>
+
+</body>
+</html>
+

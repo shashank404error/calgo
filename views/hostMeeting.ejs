@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<head>
+
+    <title><%=title%></title>
+
+    <link rel="stylesheet" href="./views/css/main.css" />
+
+    <style>
+        #localVideo {
+            max-width: 20%;
+            width: 100px;
+        }
+        #remoteVideo{
+            max-width: 100%;
+            width: 800px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<div class="w3-display-container w3-text-black">
+    <div class="w3-display-topleft w3-xxlarge w3-text-white">
+        <b>CalGo</b>
+    </div>
+
+    <div class="w3-display-topright">
+        <h5 class="w3-white w3-round-large"><b>Meeting Id : <%=meetingId%></b></h5>
+        <input type="text" value='<%=meetingId%>' id="meetingIdForChatRoom" hidden>
+    </div>
+
+          <center><video class="w3-round-large" id="remoteVideo" autoplay></video>
+              
+              <div class="w3-panel w3-grey">
+                  <video class="w3-round-large" id="localVideo" autoplay></video>
+              </div>
+          </center>
+
+     <br>
+    <center>
+     <div>
+      <button id="callButton" class="w3-transparent w3-border-0"><img src="https://i1.wp.com/www.noahprice.co.uk/wp-content/uploads/2017/10/Call-Button.fw_.png?fit=225%2C225&ssl=1" style="width: 50px;height: 50px;"></button>
+         <!---<button id="startButton" class="w3-round-large w3-button w3-blue">Start</button>--->
+      <button id="hangupButton" class="w3-transparent w3-border-0"><img src="https://media.istockphoto.com/vectors/decline-phone-call-button-handset-icon-red-vector-vector-id1009319536?k=6&m=1009319536&s=170667a&w=0&h=ZE4rorgDql7UzjGfIBbfQ2SxnyiZ0E2rH7kkG1AMxcE=" style="width: 60px;height: 60px;"></button>
+     </div>
+    </center>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<script src="javascripts/mainHostMeeting.js"></script>
+
+</body>
+
+</html>
