@@ -19,11 +19,11 @@ Calgo uses a trickle tehnique to establish communication real fast. It uses webR
 ## Dependencies
    * **ejs**  - Templating language to support HTML markup with plain javascript.
    * **express** - A node.js framework for making servers.
-   * **express-fileupload** - To upload the file to the server.
+   * **jssha** - Implements the complete Secure Hash Standard (SHA) family.
    * **http-errors** - to handle all HTTP errors.
    * **morgan** - An express middleware to log all the request to the application.
-   * **mysql** - It is used as a dbms hosted remotly on remotesql.com.
-   * **nodemailer** - It is a middleware used to send emails.
+   * **socket.io** - It enables realtime, bi-directional communication between web clients and servers.
+   * **btoa** - Creates a Base64-encoded ASCII string from a binary string.
     
    
     You can view all the other dependencies in package.json file
