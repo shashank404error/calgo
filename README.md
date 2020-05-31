@@ -9,7 +9,7 @@ Calgo uses a trickle tehnique to establish communication real fast. It uses webR
 * Signup to host your own call and share the meeting Id with peers.
 * Join a meeting using meeting Id.
 
-## How to run FoodServer locally on your machine
+## How to run CalGo locally on your machine
 
   * Clone the repository to your device (by default it will be saved as calgo).
   * Install nodejs and expressjs through npm
