@@ -32,10 +32,11 @@
     </div>
 
     <div class="w3-display-topright">
-        <h5 class="w3-white w3-round-large" id="showClientMeetingID"></h5>
+        <h5 class="w3-white w3-round-large" id="showClientMeetingIDCalleSide"><%=meetingId%></h5>
     </div>
 
-    <center><video class="w3-round-large" id="remoteVideo" autoplay></video>
+    <center><div id="messageBeforeConnecting" class="w3-cell w3-cell-middle" style="width:100%;height:400px;"><h4>Press <div class="w3-text-green">Call</div> button to join this meeting..</h4></div>
+        <video class="w3-round-large" id="remoteVideo" autoplay style="display: none;"></video>
 
         <div class="w3-panel w3-grey">
             <video class="w3-round-large" id="localVideo" autoplay ></video>
@@ -45,16 +46,19 @@
     <br>
     <center>
         <div>
-            <button id="callButton" class="w3-transparent w3-border-0"><img src="https://i1.wp.com/www.noahprice.co.uk/wp-content/uploads/2017/10/Call-Button.fw_.png?fit=225%2C225&ssl=1" style="width: 50px;height: 50px;"></button>
+            <button id="joinCallButton" class="w3-transparent w3-border-0" onclick="joinRoom(document.getElementById('showClientMeetingIDCalleSide').textContent)"><img src="https://i1.wp.com/www.noahprice.co.uk/wp-content/uploads/2017/10/Call-Button.fw_.png?fit=225%2C225&ssl=1" style="width: 50px;height: 50px;"></button>
             <!---<button id="startButton" class="w3-round-large w3-button w3-blue">Start</button>--->
             <button id="hangupButton" class="w3-transparent w3-border-0"><img src="https://media.istockphoto.com/vectors/decline-phone-call-button-handset-icon-red-vector-vector-id1009319536?k=6&m=1009319536&s=170667a&w=0&h=ZE4rorgDql7UzjGfIBbfQ2SxnyiZ0E2rH7kkG1AMxcE=" style="width: 60px;height: 60px;"></button>
         </div>
     </center>
 </div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-<script src="javascripts/mainJoinMeeting.js"></script>
+<!---<script src="/socket.io/socket.io.js"></script>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>--->
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-analytics.js"></script>
+<script src="javascripts/firebaseJoinMeeting.js"></script>
 
 </body>
 

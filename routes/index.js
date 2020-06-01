@@ -12,13 +12,15 @@ router.get('/', function(req, res, next) {
 
 router.get('/host-a-meeting', function(req, res,next){
  var meetingId=getRandomInt();
- res.render('hostMeeting', { title: 'Calgo - An Indigenous Video Calling Solution',
-                              meetingId : meetingId
+
+ res.render('hostMeeting', { title: 'Calgo - An Indigenous Video Calling Solution'
     });
 });
 
 router.get('/join-a-meeting', function(req, res,next){
-    res.render('joinMeeting', { title: 'Calgo - An Indigenous Video Calling Solution'
+    var meetingId=req.query.meetingId;
+    res.render('joinMeeting', { title: 'Calgo - An Indigenous Video Calling Solution',
+        meetingId:meetingId
     });
 });
 
