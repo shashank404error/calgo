@@ -129,6 +129,8 @@ async function openUserMedia(e) {
     document.querySelector('#localVideo').srcObject = stream;
     localStream = stream;
     remoteStream = new MediaStream();
+    document.getElementById("callButton").disabled=false;
+    document.getElementById("hangupButton").disabled=false;
     document.querySelector('#remoteVideo').srcObject = remoteStream;
 
     console.log('Stream:', document.querySelector('#localVideo').srcObject);

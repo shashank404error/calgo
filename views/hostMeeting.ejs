@@ -36,16 +36,16 @@
         <video class="w3-round-large" id="remoteVideo" autoplay style="display: none;"></video>
 
         <div class="w3-panel w3-grey">
-            <video class="w3-round-large" id="localVideo" autoplay playsinline ></video><br><label>You</label>
+            <video class="w3-round-large" id="localVideo" autoplay playsinline muted="muted"></video><br><label>You</label>
         </div>
     </center>
 
     <br>
     <center>
         <div>
-            <button id="callButton" class="w3-transparent w3-border-0" onclick="createRoom()"><img src="https://i1.wp.com/www.noahprice.co.uk/wp-content/uploads/2017/10/Call-Button.fw_.png?fit=225%2C225&ssl=1" style="width: 50px;height: 50px;"></button>
-            <!---<button id="startButton" class="w3-round-large w3-button w3-blue">Start</button>--->
-            <button id="hangupButton" class="w3-transparent w3-border-0"><img src="https://media.istockphoto.com/vectors/decline-phone-call-button-handset-icon-red-vector-vector-id1009319536?k=6&m=1009319536&s=170667a&w=0&h=ZE4rorgDql7UzjGfIBbfQ2SxnyiZ0E2rH7kkG1AMxcE=" style="width: 60px;height: 60px;"></button>
+            <button id="callButton" class="w3-transparent w3-border-0" onclick="createRoom()" disabled><img src="https://i1.wp.com/www.noahprice.co.uk/wp-content/uploads/2017/10/Call-Button.fw_.png?fit=225%2C225&ssl=1" style="width: 50px;height: 50px;"></button>
+
+            <button id="hangupButton" class="w3-transparent w3-border-0" disabled><img src="https://media.istockphoto.com/vectors/decline-phone-call-button-handset-icon-red-vector-vector-id1009319536?k=6&m=1009319536&s=170667a&w=0&h=ZE4rorgDql7UzjGfIBbfQ2SxnyiZ0E2rH7kkG1AMxcE=" style="width: 60px;height: 60px;"></button>
         </div>
     </center>
     <br>
