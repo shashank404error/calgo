@@ -157,3 +157,7 @@ function registerPeerConnectionListeners() {
 }
 
 init();
+var w = window.innerWidth;
+var h = window.innerHeight;
+document.getElementById("remoteVideo").height=h;
+document.getElementById("remoteVideo").width=w;

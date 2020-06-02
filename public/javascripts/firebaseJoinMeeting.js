@@ -38,9 +38,9 @@ function joinRoom(meetingId) {
     document.getElementById("messageBeforeConnecting").style.display="none";
     document.getElementById("remoteVideo").style.display="block";
    // meetingId = prompt("Please enter Meeting ID - ", 1234);
+    document.getElementById("showPeerIsLive").style.display="block";
     console.log('Joined Calgo Meeting: ', meetingId);
-    document.querySelector(
-        '#showClientMeetingIDCalleSide').innerText = `Meeting ID - ${meetingId}`;
+    //document.querySelector('#showClientMeetingIDCalleSide').innerText = `ID - ${meetingId}`;
     joinMeetingById(meetingId);
 }
 
@@ -146,3 +146,7 @@ function registerPeerConnectionListeners() {
 }
 
 init();
+var w = window.innerWidth;
+var h = window.innerHeight;
+document.getElementById("remoteVideo").height=h;
+document.getElementById("remoteVideo").width=w;
