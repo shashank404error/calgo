@@ -24,11 +24,13 @@ const configuration = {
     ],
     iceCandidatePoolSize: 10,
 };
-
+var meetingMetaId=null;
 let peerConnection = null;
 let localStream = null;
-let remoteStream = null;
+let remoteStream2 = null;
+
 let meetingId = null;
+var peerIsConnected1 = true;
 
 function init() {
     openUserMedia()
@@ -43,41 +45,14 @@ async function createRoom() {
     const db = firebase.firestore();
     const meetingRef = await db.collection('meetings').doc();
 
-    console.log('Calgo peer configuration: ', configuration);
-    peerConnection = new RTCPeerConnection(configuration);
+    var setWithMerge = meetingRef.set({
+        count : 1
+    }, { merge: true });
 
-    registerPeerConnectionListeners();
 
-    localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
-    });
-
-    // Code for collecting ICE candidates below
-    const callerCandidatesCollection = meetingRef.collection('callerCandidates');
-
-    peerConnection.addEventListener('icecandidate', event => {
-        if (!event.candidate) {
-            console.log('Got final candidate!');
-            return;
-        }
-        console.log('Got candidate: ', event.candidate);
-        callerCandidatesCollection.add(event.candidate.toJSON());
-    });
-    // Code for collecting ICE candidates above
-
-    // Code for creating a room below
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
-    console.log('Created offer:', offer);
-
-    const roomWithOffer = {
-        'offer': {
-            type: offer.type,
-            sdp: offer.sdp,
-        },
-    };
-    await meetingRef.set(roomWithOffer);
     meetingId = meetingRef.id;
+    meetingMetaId = meetingId;
+    connectNewPeer(meetingMetaId);
     console.log(`Calgo created meeting with SDP offer. Meeting ID: ${meetingRef.id}`);
     //document.querySelector('#meetingIdForChatRoom').innerText = `Meeting ID - ${meetingRef.id}`;
 
@@ -90,53 +65,19 @@ async function createRoom() {
     document.getElementById("uniqueHrefToMeet").appendChild(anchorTag);
     // Code for creating a room above
 
-    peerConnection.addEventListener('track', event => {
-        console.log('Calgo Got remote track:', event.streams[0]);
-        event.streams[0].getTracks().forEach(track => {
-            console.log('Calgo added remoteStream track:', track);
-            remoteStream.addTrack(track);
-        });
-    });
 
-    // Listening for remote session description below
-    meetingRef.onSnapshot(async snapshot => {
-        const data = snapshot.data();
-        if (!peerConnection.currentRemoteDescription && data && data.answer) {
-            console.log('Got remote description: ', data.answer);
-            const rtcSessionDescription = new RTCSessionDescription(data.answer);
-            await peerConnection.setRemoteDescription(rtcSessionDescription);
-            document.getElementById("messageBeforeConnecting").style.display="none";
-            document.getElementById("remoteVideo").style.display="block";
-        }
-    });
-    // Listening for remote session description above
-
-    // Listen for remote ICE candidates below
-    meetingRef.collection('calleeCandidates').onSnapshot(snapshot => {
-        snapshot.docChanges().forEach(async change => {
-            if (change.type === 'added') {
-                let data = change.doc.data();
-                console.log(`Got new remote ICE candidate: ${JSON.stringify(data)}`);
-                await peerConnection.addIceCandidate(new RTCIceCandidate(data));
-            }
-        });
-    });
-    // Listen for remote ICE candidates above
 }
 
 async function openUserMedia(e) {
     const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: {'echoCancellation': true}});
     document.querySelector('#localVideo').srcObject = stream;
     localStream = stream;
-    remoteStream = new MediaStream();
     document.getElementById("callButton").disabled=false;
     document.getElementById("hangupButton").disabled=false;
-    document.querySelector('#remoteVideo').srcObject = remoteStream;
-
     console.log('Stream:', document.querySelector('#localVideo').srcObject);
 }
 
-function registerPeerConnectionListeners() {
+function registerPeerConnectionListeners(peerConnection) {
     peerConnection.addEventListener('icegatheringstatechange', () => {
         console.log(
             `ICE gathering state changed with Calgo: ${peerConnection.iceGatheringState}`);
@@ -157,7 +98,131 @@ function registerPeerConnectionListeners() {
 }
 
 init();
-var w = window.innerWidth;
-var h = window.innerHeight;
-document.getElementById("remoteVideo").height=h;
-document.getElementById("remoteVideo").width=w;
+
+
+//document.getElementById("monu").height=h;
+//document.getElementById("golu").height=h;
+
+//connecting peer2
+async function connectNewPeer(meetingMetaId){
+    const db = firebase.firestore();
+    var meetRef = db.collection('meetings').doc(meetingMetaId);
+    var offerRef = meetRef.collection("OfferByName");
+    var answerRef = meetRef.collection("answerByName");
+    var IceCandidateRef = meetRef;
+
+    meetRef.collection("peersByName").doc("names")
+        .onSnapshot(function(doc) {
+            if(doc.data()) {
+                var peerName=doc.data().peerName;
+                var RTCPeerObjName = peerName+"PeerConnection";
+                console.log("New peer added with name : ", peerName);
+                //add new peer meta func
+                addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peerName);
+            }
+        });
+}
+
+async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peerName){
+
+    var h = window.innerHeight;
+    var newVideoTag = document.createElement("video");
+    newVideoTag.classList.add("w3-round-large");
+    newVideoTag.height=h;
+     newVideoTag.autoplay = true;
+    newVideoTag.id=peerName;
+    newVideoTag.style.width="100%";
+
+    var peerNameToDisplayText = document.createTextNode(peerName);
+    var peerNameToDisplay = document.createElement("h4");
+    peerNameToDisplay.appendChild(peerNameToDisplayText);
+    peerNameToDisplay.classList.add("w3-text-black");
+    peerNameToDisplay.classList.add("w3-white");
+    peerNameToDisplay.classList.add("w3-round-large");
+
+    var newVideoCell = document.createElement("div");
+    newVideoCell.classList.add("w3-cell");
+
+    newVideoCell.appendChild(peerNameToDisplay);
+    newVideoCell.appendChild(newVideoTag);
+
+    document.getElementById("addAllVideoDiv").appendChild(newVideoCell);
+    //creating a video section for new peer adding above
+
+    document.getElementById("messageBeforeConnecting").style.display="none";
+
+    console.log('Calgo peer configuration: ', configuration);
+    peerConnectionNew = new RTCPeerConnection(configuration);
+
+    registerPeerConnectionListeners(peerConnectionNew);
+
+    localStream.getTracks().forEach(track => {
+        peerConnectionNew.addTrack(track, localStream);
+    });
+
+    remoteStream2 = new MediaStream();
+    document.getElementById(peerName).srcObject = remoteStream2;
+
+    // Code for collecting ICE candidates below
+    const callerCandidatesCollection = IceCandidateRef.collection('HostTo'+peerName);
+
+    peerConnectionNew.addEventListener('icecandidate', event => {
+        if (!event.candidate) {
+            console.log('Got final candidate!');
+            return;
+        }
+        console.log('Got candidate of Host: ', event.candidate);
+        callerCandidatesCollection.add(event.candidate.toJSON());
+    });
+    // Code for collecting ICE candidates above
+
+    //code for setting remote track
+    peerConnectionNew.addEventListener('track', event => {
+        console.log('Got remote track from New Peer:', event.streams[0]);
+        event.streams[0].getTracks().forEach(track => {
+            console.log('Add a track to the remoteStream:', track);
+            remoteStream2.addTrack(track);
+        });
+    });
+
+    // Code for creating an offer and setting local discription below
+    const offer = await peerConnectionNew.createOffer();
+    await peerConnectionNew.setLocalDescription(offer);
+    console.log('Created offer:', offer);
+
+    const roomWithOffer = {
+        'offer': {
+            type: offer.type,
+            sdp: offer.sdp,
+        },
+    };
+    await offerRef.doc('HostTo'+peerName).set(roomWithOffer,{ merge: true });
+    // Code for creating an offer and setting local discription above
+
+
+
+    // Listening for remote session description below
+    answerRef.doc(peerName+'ToHost').onSnapshot(async snapshot => {
+        const data = snapshot.data();
+        if (!peerConnectionNew.currentRemoteDescription && data && data.answer) {
+            console.log('Got remote description from New Peer: ', data.answer);
+            const rtcSessionDescription = new RTCSessionDescription(data.answer);
+            await peerConnectionNew.setRemoteDescription(rtcSessionDescription);
+        }
+    });
+    // Listening for remote session description above
+
+    // Listen for remote ICE candidates below
+    IceCandidateRef.collection(peerName+'ToHost').onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(async change => {
+            if (change.type === 'added') {
+                let data = change.doc.data();
+                console.log(`Got new remote ICE candidate from New peer: ${JSON.stringify(data)}`);
+                await peerConnectionNew.addIceCandidate(new RTCIceCandidate(data));
+            }
+        });
+    });
+    // Listen for remote ICE candidates above
+
+
+}
