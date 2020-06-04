@@ -125,13 +125,15 @@ async function connectNewPeer(meetingMetaId){
 
 async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peerName){
 
-    var h = window.innerHeight;
+
     var newVideoTag = document.createElement("video");
     newVideoTag.classList.add("w3-round-large");
-    newVideoTag.height=h;
      newVideoTag.autoplay = true;
+    var h = window.innerHeight;
     newVideoTag.id=peerName;
     newVideoTag.style.width="100%";
+    newVideoTag.style.maxHeight=h;
+
 
     var peerNameToDisplayText = document.createTextNode(peerName);
     var peerNameToDisplay = document.createElement("h4");

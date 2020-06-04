@@ -270,10 +270,10 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
     var h = window.innerHeight;
     var newVideoTag = document.createElement("video");
     newVideoTag.classList.add("w3-round-large");
-    newVideoTag.height=h;
     newVideoTag.autoplay = true;
     newVideoTag.id=peerName;
     newVideoTag.style.width="100%";
+    newVideoTag.style.maxHeight=h;
 
     var peerNameToDisplayText = document.createTextNode(peerName);
     var peerNameToDisplay = document.createElement("h4");
@@ -374,10 +374,10 @@ async function peerPreviousPeerConnections(RTCPeerConnectionObj,offerData,answer
     var h = window.innerHeight;
     var newVideoTag = document.createElement("video");
     newVideoTag.classList.add("w3-round-large");
-    newVideoTag.height=h;
     newVideoTag.autoplay = true;
     newVideoTag.id=callerPeer;
     newVideoTag.style.width="100%";
+    newVideoTag.style.maxHeight=h;
 
     var peerNameToDisplayText = document.createTextNode(callerPeer);
     var peerNameToDisplay = document.createElement("h4");
@@ -454,4 +454,8 @@ async function peerPreviousPeerConnections(RTCPeerConnectionObj,offerData,answer
 
 
 init();
+
+var heightOfVidCon = window.innerHeight;
+document.getElementById("addAllVideoDiv").style.height=heightOfVidCon;
+
 
