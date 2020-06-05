@@ -28,7 +28,6 @@ const configuration = {
 //constants
 let localStream = null;
 let remoteStream = null;
-let peerConnection = null;
 let remoteStream2 = null;
 let remoteStream3 = null;
 
@@ -37,12 +36,11 @@ function init() {
 }
 
 function joinRoom(meetingId) {
-    document.getElementById("joinCallButton").style.display="none";
     //media handling buttons
+    document.getElementById("joinCallButton").style.display="none";
     document.getElementById("vidDisableButton").style.display="block";
     document.getElementById("micDisableButton").style.display="block";
     document.getElementById("messageBeforeConnecting").style.display="none";
-    document.getElementById("showPeerIsLive").style.display="block";
     console.log('Joined Calgo Meeting: ', meetingId);
     joinMeetingById(meetingId);
 }
@@ -260,6 +258,11 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
   //  document.getElementById(peerName).style.display="block";
     document.getElementById("messageBeforeConnecting").style.display="none";
 
+    //MultipeerLayout prepairing
+    document.getElementById("layerTwoForFortyHeight").style.display = "block";
+    document.getElementById("layerTwoForSixtyHeight").style.height = "60%";
+    document.getElementById("layerOneForHeightSixty").style.height = "60%";
+
     console.log('Calgo peer configuration: ', configuration);
     peerConnectionNew = new RTCPeerConnection(configuration);
 
@@ -270,23 +273,28 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
     });
 
     //creating a video element for display
-    var h = window.innerHeight;
+    //var h = window.innerHeight;
     var newVideoTag = document.createElement("video");
     newVideoTag.classList.add("w3-round-large");
+    newVideoTag.classList.add("m-0");
+    newVideoTag.classList.add("p-0");
     newVideoTag.autoplay = true;
     newVideoTag.id=peerName;
-    newVideoTag.style.width="100%";
-    newVideoTag.style.maxHeight=h;
+    newVideoTag.style.width="260px";
+    newVideoTag.style.height="94%";
 
     var peerNameToDisplayText = document.createTextNode(peerName);
-    var peerNameToDisplay = document.createElement("h4");
+    var peerNameToDisplay = document.createElement("h6");
     peerNameToDisplay.appendChild(peerNameToDisplayText);
-    peerNameToDisplay.classList.add("w3-text-black");
-    peerNameToDisplay.classList.add("w3-white");
-    peerNameToDisplay.classList.add("w3-round-large");
+    peerNameToDisplay.classList.add("w3-text-white");
+    peerNameToDisplay.classList.add("w3-center");
+    peerNameToDisplay.style.width="300px";
+
 
     var newVideoCell = document.createElement("div");
-    newVideoCell.classList.add("w3-cell");
+    //newVideoCell.classList.add("w3-container");
+    newVideoCell.classList.add("p-0");
+    newVideoCell.style.width="260px";
 
     newVideoCell.appendChild(peerNameToDisplay);
     newVideoCell.appendChild(newVideoTag);
@@ -363,6 +371,12 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
 
 async function peerPreviousPeerConnections(RTCPeerConnectionObj,offerData,answerRef,roomRef,peerName,callerPeer){
    // document.getElementById(callerPeer).style.display="block";
+
+    //MultipeerLayout prepairing
+    document.getElementById("layerTwoForFortyHeight").style.display = "block";
+    document.getElementById("layerTwoForSixtyHeight").style.height = "60%";
+    document.getElementById("layerOneForHeightSixty").style.height = "60%";
+
     console.log("connecting to callerPeer : responding offer");
     RTCPeerConnectionObj = new RTCPeerConnection(configuration);
     registerPeerConnectionListeners(RTCPeerConnectionObj);
@@ -374,23 +388,27 @@ async function peerPreviousPeerConnections(RTCPeerConnectionObj,offerData,answer
     });
 
 
-    var h = window.innerHeight;
+    //var h = window.innerHeight;
     var newVideoTag = document.createElement("video");
     newVideoTag.classList.add("w3-round-large");
+    newVideoTag.classList.add("m-0");
+    newVideoTag.classList.add("p-0");
     newVideoTag.autoplay = true;
     newVideoTag.id=callerPeer;
-    newVideoTag.style.width="100%";
-    newVideoTag.style.maxHeight=h;
+    newVideoTag.style.width="260px";
+    newVideoTag.style.height="94%";
 
     var peerNameToDisplayText = document.createTextNode(callerPeer);
-    var peerNameToDisplay = document.createElement("h4");
+    var peerNameToDisplay = document.createElement("h6");
     peerNameToDisplay.appendChild(peerNameToDisplayText);
-    peerNameToDisplay.classList.add("w3-text-black");
-    peerNameToDisplay.classList.add("w3-white");
-    peerNameToDisplay.classList.add("w3-round-large");
+    peerNameToDisplay.classList.add("w3-text-white");
+    peerNameToDisplay.style.width="260px";
+    peerNameToDisplay.classList.add("w3-center");
 
     var newVideoCell = document.createElement("div");
-    newVideoCell.classList.add("w3-cell");
+   // newVideoCell.classList.add("w3-container");
+    newVideoCell.style.width="260px";
+    newVideoCell.classList.add("p-0");
 
     newVideoCell.appendChild(peerNameToDisplay);
     newVideoCell.appendChild(newVideoTag);
@@ -457,8 +475,8 @@ async function peerPreviousPeerConnections(RTCPeerConnectionObj,offerData,answer
 
 init();
 
-var heightOfVidCon = window.innerHeight;
-document.getElementById("addAllVideoDiv").style.height=heightOfVidCon;
+//var heightOfVidCon = window.innerHeight;
+//document.getElementById("addAllVideoDiv").style.height=heightOfVidCon;
 
 //media control during a call
 function videoDisabledByUser(){
