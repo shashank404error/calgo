@@ -288,7 +288,7 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
     peerNameToDisplay.appendChild(peerNameToDisplayText);
     peerNameToDisplay.classList.add("w3-text-white");
     peerNameToDisplay.classList.add("w3-center");
-    peerNameToDisplay.style.width="300px";
+    peerNameToDisplay.style.width="260px";
 
 
     var newVideoCell = document.createElement("div");

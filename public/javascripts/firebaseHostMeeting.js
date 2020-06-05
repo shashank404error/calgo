@@ -38,8 +38,12 @@ function init() {
 
 async function createRoom() {
     //getting hidden features on
-    document.getElementById("callButton").disabled=true;
     document.getElementById("messageBeforeConnecting").innerHTML="<h4>Share the link generated below</h4><br><h5>and wait for others to join...</h5>";
+
+    //media handling buttons
+    document.getElementById("callButton").style.display="none";
+    document.getElementById("vidDisableButton").style.display="block";
+    document.getElementById("micDisableButton").style.display="block";
 
     const db = firebase.firestore();
     const meetingRef = await db.collection('meetings').doc();
@@ -72,7 +76,7 @@ async function openUserMedia(e) {
     const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: {'echoCancellation': true}});
     document.querySelector('#localVideo').srcObject = stream;
     localStream = stream;
-    document.getElementById("callButton").disabled=false;
+    document.getElementById("callButton").style.display="block";
     document.getElementById("hangupButton").disabled=false;
     console.log('Stream:', document.querySelector('#localVideo').srcObject);
 }
@@ -128,22 +132,25 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
 
     var newVideoTag = document.createElement("video");
     newVideoTag.classList.add("w3-round-large");
+    newVideoTag.classList.add("w3-blue-grey");
      newVideoTag.autoplay = true;
-    var h = window.innerHeight;
     newVideoTag.id=peerName;
-    newVideoTag.style.width="100%";
-    newVideoTag.style.maxHeight=h;
+    newVideoTag.style.width="300px";
+    newVideoTag.style.height="100%";
 
 
     var peerNameToDisplayText = document.createTextNode(peerName);
-    var peerNameToDisplay = document.createElement("h4");
+    var peerNameToDisplay = document.createElement("h6");
     peerNameToDisplay.appendChild(peerNameToDisplayText);
     peerNameToDisplay.classList.add("w3-text-black");
     peerNameToDisplay.classList.add("w3-white");
+    peerNameToDisplay.classList.add("w3-center");
+    peerNameToDisplay.style.width="300px";
     peerNameToDisplay.classList.add("w3-round-large");
 
     var newVideoCell = document.createElement("div");
-    newVideoCell.classList.add("w3-cell");
+    newVideoCell.classList.add("p-0");
+    newVideoCell.style.width="300px";
 
     newVideoCell.appendChild(peerNameToDisplay);
     newVideoCell.appendChild(newVideoTag);
@@ -153,6 +160,7 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
 
     document.getElementById("messageBeforeConnecting").style.display="none";
     document.getElementById("linkToJoinCall").style.display="none";
+    document.getElementById("layerTwoForFortyHeight").style.display="block";
 
     console.log('Calgo peer configuration: ', configuration);
     peerConnectionNew = new RTCPeerConnection(configuration);
