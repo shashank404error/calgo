@@ -37,7 +37,10 @@ function init() {
 }
 
 function joinRoom(meetingId) {
-    document.getElementById("joinCallButton").disabled=true;
+    document.getElementById("joinCallButton").style.display="none";
+    //media handling buttons
+    document.getElementById("vidDisableButton").style.display="block";
+    document.getElementById("micDisableButton").style.display="block";
     document.getElementById("messageBeforeConnecting").style.display="none";
     document.getElementById("showPeerIsLive").style.display="block";
     console.log('Joined Calgo Meeting: ', meetingId);
@@ -97,8 +100,8 @@ async function openUserMedia(e) {
     document.querySelector('#localVideo').srcObject = stream;
     localStream = stream;
 
-    document.getElementById("joinCallButton").disabled=false;
-    document.getElementById("hangupButton").disabled=false;
+    document.getElementById("joinCallButton").style.display="block";
+    document.getElementById("hangupButton").style.display="block";
     //peer1 added media track
     remoteStream = new MediaStream();
     document.querySelector('#remoteVideo').srcObject = remoteStream;
@@ -452,10 +455,54 @@ async function peerPreviousPeerConnections(RTCPeerConnectionObj,offerData,answer
 }
 
 
-
 init();
 
 var heightOfVidCon = window.innerHeight;
 document.getElementById("addAllVideoDiv").style.height=heightOfVidCon;
+
+//media control during a call
+function videoDisabledByUser(){
+    if(localStream==null){
+        console.log("no video is streamed!");
+    }
+    else{
+        document.getElementById("vidEnableButton").style.display="block";
+        document.getElementById("vidDisableButton").style.display="none";
+        localStream.getVideoTracks()[0].enabled = false;
+    }
+}
+
+function videoEnabledByUser(){
+    if(localStream==null){
+        console.log("no video is streamed!");
+    }
+    else{
+        document.getElementById("vidDisableButton").style.display="block";
+        document.getElementById("vidEnableButton").style.display="none";
+        localStream.getVideoTracks()[0].enabled = true;
+    }
+}
+
+function audioEnabledByUser(){
+    if(localStream==null){
+        console.log("no audio is streamed!");
+    }
+    else{
+        document.getElementById("micDisableButton").style.display="block";
+        document.getElementById("micEnableButton").style.display="none";
+        localStream.getAudioTracks()[0].enabled = true;
+    }
+}
+
+function audioDisabledByUser(){
+    if(localStream==null){
+        console.log("no audio is streamed!");
+    }
+    else{
+        document.getElementById("micDisableButton").style.display="none";
+        document.getElementById("micEnableButton").style.display="block";
+        localStream.getAudioTracks()[0].enabled = false;
+    }
+}
 
 

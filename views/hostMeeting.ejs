@@ -23,17 +23,22 @@
         html, body {
             height: 100%;
             margin: 0px;
-            background-color: black;
+            background-color: #797b85;
         }
     </style>
 </head>
 
 <body>
 
-<div class="w3-display-container w3-text-white w3-black" id="overlayOptionLayerBackground" style="position: absolute; z-index: 1; height:100%;width:100%;">
-    <center><div id="messageBeforeConnecting" class="w3-cell w3-cell-middle" style="width:100%;height:400px;"><h4>Press <div class="w3-text-green">Call</div> button to start this meeting...</h4></div></center>
+<div class="w3-display-container w3-text-white" id="overlayOptionLayerBackground" style="position: absolute; z-index: 1; height:100%;width:100%;">
+    <center><div id="messageBeforeConnecting" class="w3-cell w3-cell-middle" style="width:100%;height:400px;"><h4>Press <div class="w3-text-green">Call</div> button to start this meeting...</h4>
+        </div>
+    </center>
+
+    <!----------------all videos should rendered here------------->
         <center><div class="w3-cell-row" id="addAllVideoDiv">
         </div></center>
+
 </div>
 
 <div class="w3-display-container w3-text-white" id="overlayOptionLayerForeground" style="position: relative; z-index: 2;height:100%;width:100%;">
@@ -45,20 +50,21 @@
         <center><video class="w3-round-large w3-right" id="localVideo" autoplay playsinline muted="muted" style="width: 100%;height: 100%;"></video></center>
     </div>
 
-
+    <div class="w3-display-middle"><b><div id="uniqueHrefToMeet" class="w3-container w3-text-white"></div></b></div>
 
         <div class="w3-display-bottommiddle">
             <center> <br>
-            <button id="callButton" class="w3-transparent w3-border-0" onclick="createRoom()" disabled><img src="https://i1.wp.com/www.noahprice.co.uk/wp-content/uploads/2017/10/Call-Button.fw_.png?fit=225%2C225&ssl=1" style="width: 50px;height: 50px;"></button>
-
-            <button id="hangupButton" class="w3-transparent w3-border-0" disabled><img src="images/hangupBtn.png" style="width: 60px;height: 60px;"></button>
-            <br></center>
+                <div class="w3-cell-row">
+                <div class="w3-cell"><button id="callButton" class="w3-transparent w3-border-0" onclick="createRoom()" disabled><img src="https://i1.wp.com/www.noahprice.co.uk/wp-content/uploads/2017/10/Call-Button.fw_.png?fit=225%2C225&ssl=1" style="width: 50px;height: 50px;"></button></div>
+                <div class="w3-cell"><button id="vidEnableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="videoEnabledByUser()"><img src="images/vidDisable.png" style="width: 60px;height: 60px;"></button></div>
+                <div class="w3-cell"> <button id="vidDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="videoDisabledByUser()"><img src="images/vidEnable.png" style="width: 60px;height: 60px;"></button></div>
+                <div class="w3-cell"><button id="micEnableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioEnabledByUser()"><img src="images/micDisable.png" style="width: 60px;height: 60px;"></button></div>
+                <div class="w3-cell"> <button id="micDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioDisabledByUser()"><img src="images/micEnable.png" style="width: 60px;height: 60px;"></button></div>
+                    <div class="w3-cell"><button id="hangupButton" class="w3-transparent w3-border-0" disabled><img src="images/hangupBtn.png" style="width: 60px;height: 60px;"></button></div>
+                </div>
+                    <br></center>
         </div>
 
-   <div class="w3-container w3-display-bottommiddle">
-    <label id="shareLinkLabel" style="display: none;"><b>Link to join the call - </b></label><br>
-    <div id="uniqueHrefToMeet" class="w3-container w3-text-blue"></div><br>
-   </div>
 
 </div>
 

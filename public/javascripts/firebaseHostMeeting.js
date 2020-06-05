@@ -40,7 +40,6 @@ async function createRoom() {
     //getting hidden features on
     document.getElementById("callButton").disabled=true;
     document.getElementById("messageBeforeConnecting").innerHTML="<h4>Share the link generated below</h4><br><h5>and wait for others to join...</h5>";
-    document.getElementById("shareLinkLabel").style.display="block";
 
     const db = firebase.firestore();
     const meetingRef = await db.collection('meetings').doc();
@@ -57,9 +56,10 @@ async function createRoom() {
     //document.querySelector('#meetingIdForChatRoom').innerText = `Meeting ID - ${meetingRef.id}`;
 
     var meetingLink = "https://calgo1.herokuapp.com/join-a-meeting?meetingId="+meetingId;
-    var hrefLinkText = document.createTextNode("meeting ID: "+ meetingLink);
+    var hrefLinkText = document.createTextNode(meetingLink);
     var anchorTag = document.createElement("a");
     anchorTag.appendChild(hrefLinkText);
+    anchorTag.id="linkToJoinCall";
 
     anchorTag. href = meetingLink;
     document.getElementById("uniqueHrefToMeet").appendChild(anchorTag);
@@ -152,6 +152,7 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
     //creating a video section for new peer adding above
 
     document.getElementById("messageBeforeConnecting").style.display="none";
+    document.getElementById("linkToJoinCall").style.display="none";
 
     console.log('Calgo peer configuration: ', configuration);
     peerConnectionNew = new RTCPeerConnection(configuration);
@@ -225,6 +226,49 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
         });
     });
     // Listen for remote ICE candidates above
+}
 
+//media control during a call
+function videoDisabledByUser(){
+    if(localStream==null){
+        console.log("no video is streamed!");
+    }
+    else{
+        document.getElementById("vidEnableButton").style.display="block";
+        document.getElementById("vidDisableButton").style.display="none";
+        localStream.getVideoTracks()[0].enabled = false;
+    }
+}
 
+function videoEnabledByUser(){
+    if(localStream==null){
+        console.log("no video is streamed!");
+    }
+    else{
+        document.getElementById("vidDisableButton").style.display="block";
+        document.getElementById("vidEnableButton").style.display="none";
+        localStream.getVideoTracks()[0].enabled = true;
+    }
+}
+
+function audioEnabledByUser(){
+    if(localStream==null){
+        console.log("no audio is streamed!");
+    }
+    else{
+        document.getElementById("micDisableButton").style.display="block";
+        document.getElementById("micEnableButton").style.display="none";
+        localStream.getAudioTracks()[0].enabled = true;
+    }
+}
+
+function audioDisabledByUser(){
+    if(localStream==null){
+        console.log("no audio is streamed!");
+    }
+    else{
+        document.getElementById("micDisableButton").style.display="none";
+        document.getElementById("micEnableButton").style.display="block";
+        localStream.getAudioTracks()[0].enabled = false;
+    }
 }
