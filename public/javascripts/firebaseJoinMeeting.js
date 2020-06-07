@@ -28,8 +28,6 @@ const configuration = {
 //constants
 let localStream = null;
 let remoteStream = null;
-let remoteStream2 = null;
-let remoteStream3 = null;
 
 function init() {
     openUserMedia();
@@ -43,6 +41,22 @@ function joinRoom(meetingId) {
     document.getElementById("messageBeforeConnecting").style.display="none";
     console.log('Joined Calgo Meeting: ', meetingId);
     joinMeetingById(meetingId);
+
+    const db1 = firebase.firestore();
+    db1.collection("meetings").doc(meetingId)
+        .onSnapshot(function(doc) {
+            if(doc.data().IsDisconnected==true){
+                const stream = document.getElementById('localVideo').srcObject;
+                const tracks = stream.getTracks();
+
+                tracks.forEach(function(track) {
+                    track.stop();
+                });
+
+                document.getElementById('localVideo').style.display = "none";
+                alert("This meeting was cancelled by the Host!");
+            }
+        });
 }
 
 async function joinMeetingById(roomId) {
@@ -303,7 +317,7 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
     //creating a video section for new peer adding above
 
     //set media of remote peer
-    remoteStream2 = new MediaStream();
+    let remoteStream2 = new MediaStream();
     document.getElementById(peerName).srcObject = remoteStream2;
 
     // Code for collecting ICE candidates below
@@ -417,7 +431,7 @@ async function peerPreviousPeerConnections(RTCPeerConnectionObj,offerData,answer
     //creating a video section for new peer adding above
 
     //peer2 added media track
-    remoteStream3 = new MediaStream();
+    let remoteStream3 = new MediaStream();
     document.getElementById(callerPeer).srcObject = remoteStream3;
 
     // Code for collecting ICE candidates below
@@ -522,5 +536,6 @@ function audioDisabledByUser(){
         localStream.getAudioTracks()[0].enabled = false;
     }
 }
+
 
 

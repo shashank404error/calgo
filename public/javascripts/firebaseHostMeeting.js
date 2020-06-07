@@ -25,12 +25,9 @@ const configuration = {
     iceCandidatePoolSize: 10,
 };
 var meetingMetaId=null;
-let peerConnection = null;
 let localStream = null;
 let remoteStream2 = null;
-
 let meetingId = null;
-var peerIsConnected1 = true;
 
 function init() {
     openUserMedia()
@@ -38,6 +35,8 @@ function init() {
 
 async function createRoom() {
     //getting hidden features on
+    document.getElementById("screenSharingButton").style.display="none";
+    document.getElementById("hangupButton").style.display="block";
     document.getElementById("messageBeforeConnecting").innerHTML="<h4>Share the link generated below</h4><br><h5>and wait for others to join...</h5>";
 
     //media handling buttons
@@ -73,11 +72,12 @@ async function createRoom() {
 }
 
 async function openUserMedia(e) {
+
     const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: {'echoCancellation': true}});
     document.querySelector('#localVideo').srcObject = stream;
     localStream = stream;
     document.getElementById("callButton").style.display="block";
-    document.getElementById("hangupButton").disabled=false;
+    document.getElementById("screenSharingButton").style.display="block";
     console.log('Stream:', document.querySelector('#localVideo').srcObject);
 }
 
@@ -280,3 +280,55 @@ function audioDisabledByUser(){
         localStream.getAudioTracks()[0].enabled = false;
     }
 }
+
+///screen capturing functions
+async function allowScreenCapturing(){
+       document.getElementById("screenSharingButton").style.display="none";
+       document.getElementById("callButton").style.display="none";
+        var displayMediaOptions = {
+            video: {
+                cursor: "motion"
+            },
+            audio: true
+        };
+        const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        document.getElementById('localVideo').srcObject = stream;
+        localStream = stream;
+        await createRoom();
+}
+
+async function hangCall() {
+    const stream = document.getElementById('localVideo').srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function(track) {
+        track.stop();
+    });
+
+    document.getElementById('localVideo').style.display = "none";
+
+    //deleting the sturcture from call
+    const db = firebase.firestore();
+    db.collection("meetings").doc(meetingId).delete().then(function() {
+        document.getElementById("messageBeforeConnecting").style.display="block";
+        document.getElementById("uniqueHrefToMeet").style.display="none";
+        document.getElementById("messageBeforeConnecting").innerHTML="<h4>Call disconnected</h4>";
+        location.replace("https://calgo1.herokuapp.com");
+    }).catch(function(error) {
+        console.error("Error removing document: ", error);
+    });
+}
+
+/**async function hangCallForAll() {
+    const db = firebase.firestore();
+    db.collection("meetings").doc(meetingId).set({
+        IsDisconnected: true
+    })
+        .then(function() {
+            hangCall();
+        })
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
+}**/
+
