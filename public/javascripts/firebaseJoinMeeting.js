@@ -75,32 +75,74 @@ async function joinMeetingById(roomId) {
             document.getElementById("remoteVideo").style.display="block";
             document.getElementById("hostNameLabel").style.display="block";
 
-            var peerName = prompt("Please enter your Meeting name - ", 1234);
+            var peerName = prompt("Please Enter Your Meeting Name - ", 1234);
 
-            roomRef.collection("peersByName").doc("names").set({
-                peerName: peerName
-            })
-                .then(async function() {
-                    var peerNameList = roomRef.collection('nameList').doc(peerName);
-                    var setWithMergepeerNameList = peerNameList.set({
-                        name : peerName
-                    }, { merge: true });
-                    console.log(peerName+" Added to Calgo Meeting");
-                    await connectNewPeer(roomId,peerName);
-                    /***var RTCPeerConnectionObj = peerName+"RTCPeerConnection";
-                    var answerRef = roomRef.collection("answerByName").doc(peerName+'ToHost');
-                    roomRef.collection("OfferByName").doc('HostTo'+peerName)
-                        .onSnapshot(function(doc) {
+            roomRef.collection("nameList").doc(peerName).get().then(function(doc) {
+                if (doc.exists) {
+                    console.log("peer already present", doc.data());
+                    alert(doc.data().name+" is already present");
+                    joinMeetingById(roomId);
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("New peer");
+                    roomRef.collection("peersByName").doc("names").set({
+                        peerName: peerName
+                    })
+                        .then(async function () {
+                            var peerNameList = roomRef.collection('nameList').doc(peerName);
+                            var setWithMergepeerNameList = peerNameList.set({
+                                name: peerName
+                            }, {merge: true});
+                            console.log(peerName + " Added to Calgo Meeting");
+                            await connectNewPeer(roomId, peerName);
+                            /***var RTCPeerConnectionObj = peerName+"RTCPeerConnection";
+                             var answerRef = roomRef.collection("answerByName").doc(peerName+'ToHost');
+                             roomRef.collection("OfferByName").doc('HostTo'+peerName)
+                             .onSnapshot(function(doc) {
                             if(doc.data()) {
                                 var offerData=doc.data().offer;
                                 peerToHostConnect(RTCPeerConnectionObj,offerData,answerRef,roomRef,peerName);
                             }
                         });***/
 
+                        })
+                        .catch(function (error) {
+                            console.error("Error writing document: ", error);
+                        });
+                }
+            }).catch(function(error) {
+                console.log("Error getting document:", error);
+            });
+            //var authenticPeer = CheckForDuplicacy(peerName,roomId);
+            /**if(authenticPeer==true) {
+                roomRef.collection("peersByName").doc("names").set({
+                    peerName: peerName
                 })
-                .catch(function(error) {
-                    console.error("Error writing document: ", error);
-                });
+                    .then(async function () {
+                        var peerNameList = roomRef.collection('nameList').doc(peerName);
+                        var setWithMergepeerNameList = peerNameList.set({
+                            name: peerName
+                        }, {merge: true});
+                        console.log(peerName + " Added to Calgo Meeting");
+                        await connectNewPeer(roomId, peerName);
+                        /***var RTCPeerConnectionObj = peerName+"RTCPeerConnection";
+                         var answerRef = roomRef.collection("answerByName").doc(peerName+'ToHost');
+                         roomRef.collection("OfferByName").doc('HostTo'+peerName)
+                         .onSnapshot(function(doc) {
+                            if(doc.data()) {
+                                var offerData=doc.data().offer;
+                                peerToHostConnect(RTCPeerConnectionObj,offerData,answerRef,roomRef,peerName);
+                            }
+                        });***/
+
+                    /**})
+                    .catch(function (error) {
+                        console.error("Error writing document: ", error);
+                    });**/
+            //}
+            //if(authenticPeer==false){
+             //   alert("Please choose a different name!");
+            //}
         }
     }
 }
@@ -139,6 +181,24 @@ function registerPeerConnectionListeners(peerConnection) {
     peerConnection.addEventListener('iceconnectionstatechange ', () => {
         console.log(
             `ICE connection state change: ${peerConnection.iceConnectionState}`);
+    });
+}
+
+function CheckForDuplicacy(peerName,meetingID){
+    const nameDB = firebase.firestore();
+    const meetingRef = nameDB.collection("meetings").doc(meetingID);
+
+    meetingRef.collection("nameList").doc(peerName).get().then(function(doc) {
+        if (doc.exists) {
+            console.log("peer already present", doc.data());
+            alert(doc.data().name+" is already present");
+            return false;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("New peer");
+        }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
     });
 }
 
