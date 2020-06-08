@@ -24,6 +24,20 @@ router.get('/host-a-meeting', function(req, res,next){
     });
 });
 
+router.get('/one-to-one-meeting-host', function(req, res,next){
+    var meetingId=getRandomInt();
+
+    res.render('one-to-one-call-host', { title: 'Calgo - One to one video calling Solution'
+    });
+});
+
+router.get('/one-to-one-meeting-join', function(req, res,next){
+    var meetingId=req.query.meetingId;
+    res.render('one-to-one-call-join', { title: 'Calgo - One to one video calling Solution',
+        meetingId:meetingId
+    });
+});
+
 router.get('/join-a-meeting', function(req, res,next){
     var meetingId=req.query.meetingId;
 
