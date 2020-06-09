@@ -58,7 +58,7 @@
     </div>
 
     <div class="w3-display-topright">
-        <h5 class="w3-white w3-round-large" id="showClientMeetingIDCalleSide" hidden><%=meetingId%></h5>
+        <h5 class="w3-white w3-round-large" id="showClientMeetingIDCalleSide" hidden><%=meetingId%></h5><h6 id="currPeerNameTodisplay" class="w3-white w3-round-large"></h6>
     </div>
 
 
@@ -81,7 +81,7 @@
                         <div class="w3-cell"> <button id="vidDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="videoDisabledByUser()"><img src="images/vidEnable.png" style="width: 60px;height: 60px;"></button></div>
                             <div class="w3-cell"><button id="micEnableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioEnabledByUser()"><img src="images/micDisable.png" style="width: 60px;height: 60px;"></button></div>
                                 <div class="w3-cell"> <button id="micDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioDisabledByUser()"><img src="images/micEnable.png" style="width: 60px;height: 60px;"></button></div>
-                                    <div class="w3-cell"><button id="hangupButton" class="w3-transparent w3-border-0" style="display: none;"><img src="images/hangupBtn.png" style="width: 60px;height: 60px;"></button></div>
+                                    <div class="w3-cell"><button id="hangupButton" class="w3-transparent w3-border-0" style="display: none;" onclick="hangCall()"><img src="images/hangupBtn.png" style="width: 60px;height: 60px;"></button></div>
                 </div></center>
         </div>
     </div>

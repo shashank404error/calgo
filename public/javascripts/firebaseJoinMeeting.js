@@ -28,6 +28,7 @@ const configuration = {
 //constants
 let localStream = null;
 let remoteStream = null;
+let meetingMetaSuperId =null
 
 function init() {
     openUserMedia();
@@ -35,6 +36,7 @@ function init() {
 
 function joinRoom(meetingId) {
     //media handling buttons
+    meetingMetaSuperId = meetingId;
     document.getElementById("joinCallButton").style.display="none";
     document.getElementById("vidDisableButton").style.display="block";
     document.getElementById("micDisableButton").style.display="block";
@@ -43,18 +45,13 @@ function joinRoom(meetingId) {
     joinMeetingById(meetingId);
 
     const db1 = firebase.firestore();
-    db1.collection("meetings").doc(meetingId)
+    const ref1 = db1.collection("meetings").doc(meetingMetaSuperId);
+    ref1.collection("peerLeft").doc("namesOfPeerLeft")
         .onSnapshot(function(doc) {
-            if(doc.data().IsDisconnected==true){
-                const stream = document.getElementById('localVideo').srcObject;
-                const tracks = stream.getTracks();
-
-                tracks.forEach(function(track) {
-                    track.stop();
-                });
-
-                document.getElementById('localVideo').style.display = "none";
-                alert("This meeting was cancelled by the Host!");
+            if(doc.data()) {
+                console.log("Current data: ", doc.data());
+                console.log("Current data: ", doc.data().peerLeft);
+                document.getElementById(doc.data().peerLeft).remove();
             }
         });
 }
@@ -84,6 +81,7 @@ async function joinMeetingById(roomId) {
                     joinMeetingById(roomId);
                 } else {
                     // doc.data() will be undefined in this case
+                    document.getElementById("currPeerNameTodisplay").innerHTML = peerName;
                     console.log("New peer");
                     roomRef.collection("peersByName").doc("names").set({
                         peerName: peerName
@@ -369,6 +367,7 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
     //newVideoCell.classList.add("w3-container");
     newVideoCell.classList.add("p-0");
     newVideoCell.style.width="260px";
+    newVideoCell.id="nvc"+peerName;
 
     newVideoCell.appendChild(peerNameToDisplay);
     newVideoCell.appendChild(newVideoTag);
@@ -483,6 +482,7 @@ async function peerPreviousPeerConnections(RTCPeerConnectionObj,offerData,answer
    // newVideoCell.classList.add("w3-container");
     newVideoCell.style.width="260px";
     newVideoCell.classList.add("p-0");
+    newVideoCell.id="nvc"+callerPeer;
 
     newVideoCell.appendChild(peerNameToDisplay);
     newVideoCell.appendChild(newVideoTag);
@@ -595,6 +595,46 @@ function audioDisabledByUser(){
         document.getElementById("micEnableButton").style.display="block";
         localStream.getAudioTracks()[0].enabled = false;
     }
+}
+
+//function to hang a call
+async function hangCall() {
+    let currPeerVidDiv;
+    currPeerVidDiv = document.getElementById("currPeerNameTodisplay").textContent;
+    currPeerVidDiv = "nvc"+currPeerVidDiv;
+
+    const db = firebase.firestore();
+    const meetingID = document.getElementById('showClientMeetingIDCalleSide').textContent;
+    const ref1 = db.collection("meetings").doc(meetingID);
+
+    ref1.collection("peerLeft").doc("namesOfPeerLeft").set({
+        peerLeft: currPeerVidDiv
+    })
+        .then(function() {
+            console.log("Document successfully written!");
+            const stream = document.getElementById('localVideo').srcObject;
+            const tracks = stream.getTracks();
+
+            tracks.forEach(function(track) {
+                track.stop();
+            });
+
+            document.getElementById('localVideo').style.display = "none";
+            location.replace("https://calgo1.herokuapp.com");
+        })
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
+            console.log("Document successfully written!");
+            const stream = document.getElementById('localVideo').srcObject;
+            const tracks = stream.getTracks();
+
+            tracks.forEach(function(track) {
+                track.stop();
+            });
+
+            document.getElementById('localVideo').style.display = "none";
+            location.replace("https://calgo1.herokuapp.com");
+        });
 }
 
 

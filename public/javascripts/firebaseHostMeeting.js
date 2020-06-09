@@ -125,6 +125,15 @@ async function connectNewPeer(meetingMetaId){
                 addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peerName);
             }
         });
+
+    meetRef.collection("peerLeft").doc("namesOfPeerLeft")
+        .onSnapshot(function(doc) {
+            if(doc.data()) {
+                console.log("Current data: ", doc.data());
+                console.log("Current data: ", doc.data().peerLeft);
+                document.getElementById(doc.data().peerLeft).remove();
+            }
+        });
 }
 
 async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peerName){
@@ -151,6 +160,7 @@ async function addNewPeer(RTCPeerObjName,offerRef,answerRef,IceCandidateRef,peer
     var newVideoCell = document.createElement("div");
     newVideoCell.classList.add("p-0");
     newVideoCell.style.width="300px";
+    newVideoCell.id="nvc"+peerName;
 
     newVideoCell.appendChild(peerNameToDisplay);
     newVideoCell.appendChild(newVideoTag);
