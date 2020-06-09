@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0a7a3871-8a6e-4c8c-a63c-aa55df3d92c8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/javascripts/firebaseHostMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/firebaseHostMeeting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/javascripts/firebaseJoinMeeting.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/firebaseJoinMeeting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/joinMeeting.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/joinMeeting.ejs" afterDir="false" />
-    </list>
+    <list default="true" id="0a7a3871-8a6e-4c8c-a63c-aa55df3d92c8" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,7 +57,7 @@
       <workItem from="1591372581880" duration="15878000" />
       <workItem from="1591485112522" duration="19853000" />
       <workItem from="1591603853116" duration="20278000" />
-      <workItem from="1591677698187" duration="5829000" />
+      <workItem from="1591677698187" duration="6011000" />
     </task>
     <servers />
   </component>
@@ -73,22 +68,22 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1345" height="185" key="GridCell.Tab.0.bottom" timestamp="1591683554310">
+    <state width="1345" height="156" key="GridCell.Tab.0.bottom" timestamp="1591683977529">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="185" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1591683554310" />
-    <state width="1345" height="185" key="GridCell.Tab.0.center" timestamp="1591683554306">
+    <state width="1345" height="156" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1591683977529" />
+    <state width="1345" height="156" key="GridCell.Tab.0.center" timestamp="1591683977529">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="185" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1591683554306" />
-    <state width="1345" height="185" key="GridCell.Tab.0.left" timestamp="1591683554306">
+    <state width="1345" height="156" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1591683977529" />
+    <state width="1345" height="156" key="GridCell.Tab.0.left" timestamp="1591683977528">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="185" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1591683554306" />
-    <state width="1345" height="185" key="GridCell.Tab.0.right" timestamp="1591683554306">
+    <state width="1345" height="156" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1591683977528" />
+    <state width="1345" height="156" key="GridCell.Tab.0.right" timestamp="1591683977529">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="185" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1591683554306" />
+    <state width="1345" height="156" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1591683977529" />
     <state x="391" y="191" key="com.intellij.ide.util.TipDialog" timestamp="1591677896677">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
