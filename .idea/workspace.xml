@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a7a3871-8a6e-4c8c-a63c-aa55df3d92c8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/javascripts/indexMain.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/stopScreenSharing.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/javascripts/one-to-one-host.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/one-to-one-host.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/javascripts/one-to-one-join.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/one-to-one-join.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/one-to-one-call-host.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/one-to-one-call-host.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/one-to-one-call-join.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/one-to-one-call-join.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +66,8 @@
       <workItem from="1591603853116" duration="20278000" />
       <workItem from="1591677698187" duration="6011000" />
       <workItem from="1591685280149" duration="709000" />
-      <workItem from="1591703838685" duration="7412000" />
+      <workItem from="1591703838685" duration="7698000" />
+      <workItem from="1592203836842" duration="9271000" />
     </task>
     <servers />
   </component>
@@ -74,30 +78,30 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1345" height="111" key="GridCell.Tab.0.bottom" timestamp="1591707345827">
+    <state width="1345" height="115" key="GridCell.Tab.0.bottom" timestamp="1592233463634">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="111" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1591707345827" />
-    <state width="1345" height="111" key="GridCell.Tab.0.center" timestamp="1591707345823">
+    <state width="1345" height="115" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1592233463634" />
+    <state width="1345" height="115" key="GridCell.Tab.0.center" timestamp="1592233463633">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="111" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1591707345823" />
-    <state width="1345" height="111" key="GridCell.Tab.0.left" timestamp="1591707345823">
+    <state width="1345" height="115" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1592233463633" />
+    <state width="1345" height="115" key="GridCell.Tab.0.left" timestamp="1592233463633">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="111" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1591707345823" />
-    <state width="1345" height="111" key="GridCell.Tab.0.right" timestamp="1591707345823">
+    <state width="1345" height="115" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1592233463633" />
+    <state width="1345" height="115" key="GridCell.Tab.0.right" timestamp="1592233463634">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="111" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1591707345823" />
-    <state x="391" y="191" key="com.intellij.ide.util.TipDialog" timestamp="1591704161659">
+    <state width="1345" height="115" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1592233463634" />
+    <state x="391" y="191" key="com.intellij.ide.util.TipDialog" timestamp="1592203836775">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="391" y="191" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1591704161659" />
-    <state x="339" y="162" key="run.anything.popup" timestamp="1591679505305">
+    <state x="391" y="191" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1592203836775" />
+    <state x="339" y="162" key="run.anything.popup" timestamp="1592207256066">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1591679505305" />
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1592207256066" />
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1591613857190">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

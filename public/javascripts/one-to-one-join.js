@@ -40,6 +40,7 @@ function joinRoom(meetingId) {
     document.getElementById("remoteVideo").style.display="block";
     // meetingId = prompt("Please enter Meeting ID - ", 1234);
     console.log('Joined Calgo Meeting: ', meetingId);
+    checkForScreenSharing(meetingId);
     //document.querySelector('#showClientMeetingIDCalleSide').innerText = `ID - ${meetingId}`;
     joinMeetingById(meetingId);
 }
@@ -53,7 +54,7 @@ async function joinMeetingById(roomId) {
     if (roomSnapshot.exists) {
         console.log('Create PeerConnection with configuration: ', configuration);
         peerConnection = new RTCPeerConnection(configuration);
-        registerPeerConnectionListeners();
+        registerPeerConnectionListeners(peerConnection);
         localStream.getTracks().forEach(track => {
             peerConnection.addTrack(track, localStream);
         });
@@ -126,8 +127,7 @@ async function openUserMedia(e) {
     console.log('Stream:', document.querySelector('#localVideo').srcObject);
 }
 
-
-function registerPeerConnectionListeners() {
+function registerPeerConnectionListeners(peerConnection) {
     peerConnection.addEventListener('icegatheringstatechange', () => {
         console.log(
             `ICE gathering state changed: ${peerConnection.iceGatheringState}`);
@@ -206,7 +206,110 @@ async function hangCall() {
 
 
 init();
+
+async function checkForScreenSharing(meetingId){
+    const db = firebase.firestore();
+    const meet = db.collection("meetings").doc(meetingId);
+    meet.collection("SchreenSharing").doc("status").onSnapshot(function(doc) {
+        if(doc.data().ssEnabled==true) {
+            console.log("Current state of screen sharing: ", doc.data().ssEnabled);
+            connectPeerScreen(meetingId);
+        }
+        if(doc.data().ssEnabled==false) {
+            console.log("Current state of screen sharing: ", doc.data().ssEnabled);
+            connectPeerVideo(meetingId);
+        }
+    });
+}
+
+async function connectPeerScreen(meetingId){
+    document.getElementById("remoteScreen").style.display = "block";
+    document.getElementById("remoteVideo").style.display = "none";
+    const db = firebase.firestore();
+    const roomRef = db.collection('meetings').doc(meetingId);
+    const ssRef = roomRef.collection('SchreenSharing').doc("connection");
+    const roomSnapshot = await ssRef.get();
+
+    const remoteStreamScreen = new MediaStream();
+
+    document.getElementById("remoteScreen").srcObject = remoteStreamScreen;
+    console.log('Got screen:', roomSnapshot.exists);
+
+    if (roomSnapshot.exists) {
+        console.log('Create PeerConnection with configuration: ', configuration);
+        const peerConnectionScreen = new RTCPeerConnection(configuration);
+        registerPeerConnectionListeners(peerConnectionScreen);
+
+        /**localStream.getTracks().forEach(track => {
+            peerConnectionScreen.addTrack(track, localStream);
+        });**/
+
+        // Code for collecting ICE candidates below
+        const calleeCandidatesCollection = ssRef.collection('calleeCandidates');
+        peerConnectionScreen.addEventListener('icecandidate', event => {
+            if (!event.candidate) {
+                console.log('Got final candidate!');
+                return;
+            }
+            console.log('Got candidate: ', event.candidate);
+            calleeCandidatesCollection.add(event.candidate.toJSON());
+        });
+        // Code for collecting ICE candidates above
+
+        peerConnectionScreen.addEventListener('track', event => {
+            console.log('Got remote track:', event.streams[0]);
+            event.streams[0].getTracks().forEach(track => {
+                console.log('Add a track to the remoteStreamScreen:', track);
+                remoteStreamScreen.addTrack(track);
+            });
+        });
+
+        // Code for creating SDP answer below
+        const offer = roomSnapshot.data().offer;
+        console.log('Got offer:', offer);
+        await peerConnectionScreen.setRemoteDescription(new RTCSessionDescription(offer));
+        const answer = await peerConnectionScreen.createAnswer();
+        console.log('Created answer:', answer);
+        await peerConnectionScreen.setLocalDescription(answer);
+
+        const roomWithAnswer = {
+            answer: {
+                type: answer.type,
+                sdp: answer.sdp,
+            },
+        };
+        await ssRef.update(roomWithAnswer);
+        // Code for creating SDP answer above
+
+        // Listening for remote ICE candidates below
+        ssRef.collection('callerCandidates').onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(async change => {
+                if (change.type === 'added') {
+                    let data = change.doc.data();
+                    console.log(`Got new remote ICE candidate: ${JSON.stringify(data)}`);
+                    await peerConnectionScreen.addIceCandidate(new RTCIceCandidate(data));
+                }
+            });
+        });
+        // Listening for remote ICE candidates above
+    }
+}
+
+async function connectPeerVideo() {
+    const stream = document.getElementById('remoteScreen').srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function(track) {
+        track.stop();
+    });
+
+    document.getElementById('remoteScreen').style.display="none";
+    document.getElementById('remoteVideo').style.display="block";
+}
+
 var w = window.innerWidth;
 var h = window.innerHeight;
 document.getElementById("remoteVideo").height=h;
 document.getElementById("remoteVideo").width=w;
+document.getElementById("remoteScreen").height=h;
+document.getElementById("remoteScreen").width=w;
