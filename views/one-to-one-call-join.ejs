@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
 
@@ -12,7 +13,7 @@
     <link rel="stylesheet" href="./views/css/main.css" />
 
     <style>
-        #localVideo {
+        #localVideo,#localScreen {
             max-width: 20%;
             width: 100px;
         }
@@ -23,6 +24,9 @@
         html, body {
             height: 100%;
             margin: 0px;
+        }
+        .logoFont {
+            font-family: 'Sacramento', cursive;
         }
     </style>
 </head>
@@ -36,7 +40,7 @@
 </div>
 
 <div class="w3-display-container w3-text-white" id="overlayOptionLayerForeground" style="position: relative; z-index: 2;height:100%;width:100%;">
-    <div class="w3-display-topleft w3-xxlarge w3-text-white">
+    <div class="w3-display-topleft w3-xxlarge w3-text-white logoFont">
         <b>CalGo</b>
     </div>
 
@@ -46,7 +50,8 @@
 
 
     <div class="w3-display-bottomright">
-        <video class="w3-round-large w3-right" id="localVideo" autoplay muted="muted" style="width: 100%;height: 100%;"></video>
+        <center><video class="w3-round-large w3-right" id="localVideo" autoplay muted="muted" style="width: 100%;height: 100%;"></video>
+        <video class="w3-round-large w3-right" id="localScreen" autoplay playsinline muted="muted" style="width: 100%;height: 100%;"></video></center>
     </div>
 
 
@@ -58,6 +63,8 @@
             <div class="w3-cell"> <button id="vidDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="videoDisabledByUser()"><img src="images/vidEnable.png" style="width: 50px;height: 50px;"></button></div>
             <div class="w3-cell"><button id="micEnableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioEnabledByUser()"><img src="images/micDisable.png" style="width: 50px;height: 50px;"></button></div>
             <div class="w3-cell"> <button id="micDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioDisabledByUser()"><img src="images/micEnable.png" style="width: 50px;height: 50px;"></button></div>
+                <div class="w3-cell"><button id="screenSharingButton" class="w3-transparent w3-border-0" style="display: none" onclick="screenShare()"><img src="images/screenShareing.png" style="width: 50px;height: 50px;"></button></div>
+                <div class="w3-cell"><button id="ResumeVidCallButton" class="w3-transparent w3-border-0" style="display: none" onclick="videoCallResume()"><img src="images/stopScreenSharing.png" style="width: 50px;height: 50px;"></button></div>
             <div class="w3-cell"><button id="hangupButton" class="w3-transparent w3-border-0" style="display: none" onclick="hangCall()"><img src="images/hangupBtn.png" style="width: 60px;height: 60px;"></button></div>
             </div>
         </center>

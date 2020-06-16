@@ -28,6 +28,8 @@ const configuration = {
 let peerConnection = null;
 let localStream = null;
 let remoteStream = null;
+let meetingIDGlobal = null;
+let localStreamScreen = null;
 
 function init() {
     openUserMedia();
@@ -37,7 +39,10 @@ function joinRoom(meetingId) {
     document.getElementById("joinCallButton").style.display="none";
     document.getElementById("hangupButton").style.display="block";
     document.getElementById("messageBeforeConnecting").style.display="none";
+    document.getElementById("screenSharingButton").style.display="block";
     document.getElementById("remoteVideo").style.display="block";
+
+    meetingIDGlobal = meetingId;
     // meetingId = prompt("Please enter Meeting ID - ", 1234);
     console.log('Joined Calgo Meeting: ', meetingId);
     checkForScreenSharing(meetingId);
@@ -295,7 +300,7 @@ async function connectPeerScreen(meetingId){
     }
 }
 
-async function connectPeerVideo() {
+async function connectPeerVideo(meetingId) {
     const stream = document.getElementById('remoteScreen').srcObject;
     const tracks = stream.getTracks();
 
@@ -306,6 +311,134 @@ async function connectPeerVideo() {
     document.getElementById('remoteScreen').style.display="none";
     document.getElementById('remoteVideo').style.display="block";
 }
+
+async function screenShare() {
+
+    if(meetingIDGlobal) {
+
+        document.getElementById("ResumeVidCallButton").style.display="block";
+        document.getElementById("screenSharingButton").style.display="none";
+        document.getElementById('localScreen').style.display = "block";
+        document.getElementById("localVideo").style.display="none";
+        localStream.getVideoTracks()[0].enabled = false;
+        var displayMediaOptions = {
+            video: {
+                cursor: "motion"
+            },
+            audio: true
+        };
+        const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        document.getElementById('localScreen').srcObject = stream;
+        localStreamScreen = stream;
+
+        //make the connection
+        const db = firebase.firestore();
+        const meetingRef = db.collection('meetings').doc(meetingIDGlobal);
+        const ssRef = meetingRef.collection('SchreenSharing').doc("connectionRemote");
+
+        console.log('Calgo peer configuration: ', configuration);
+        const screenPeerConnection = new RTCPeerConnection(configuration);
+
+        registerPeerConnectionListeners(screenPeerConnection);
+
+        localStreamScreen.getTracks().forEach(track => {
+            screenPeerConnection.addTrack(track, localStreamScreen);
+        });
+
+        // Code for collecting ICE candidates below
+        const callerCandidatesCollection = ssRef.collection('callerCandidates');
+
+        screenPeerConnection.addEventListener('icecandidate', event => {
+            if (!event.candidate) {
+                console.log('Got final candidate!');
+                return;
+            }
+            console.log('Got candidate: ', event.candidate);
+            callerCandidatesCollection.add(event.candidate.toJSON());
+        });
+        // Code for collecting ICE candidates above
+
+        // Code for creating a room below
+        const offer = await screenPeerConnection.createOffer();
+        await screenPeerConnection.setLocalDescription(offer);
+        console.log('Created offer:', offer);
+
+        const roomWithOffer = {
+            'offer': {
+                type: offer.type,
+                sdp: offer.sdp,
+            },
+        };
+        await ssRef.set(roomWithOffer);
+        meetingId = meetingRef.id;
+        console.log(`Calgo shared screen with SDP offer. Meeting ID: ${meetingRef.id}`);
+
+        screenPeerConnection.addEventListener('track', event => {
+            console.log('Calgo Got remote track:', event.streams[0]);
+            event.streams[0].getTracks().forEach(track => {
+                console.log('Calgo added remoteStream track:', track);
+                localStreamScreen.addTrack(track);
+            });
+        });
+
+        // Listening for remote session description below
+        ssRef.onSnapshot(async snapshot => {
+            const data = snapshot.data();
+            if (!screenPeerConnection.currentRemoteDescription && data && data.answer) {
+                console.log('Got remote description: ', data.answer);
+                const rtcSessionDescription = new RTCSessionDescription(data.answer);
+                await screenPeerConnection.setRemoteDescription(rtcSessionDescription);
+                document.getElementById("messageBeforeConnecting").style.display="none";
+                document.getElementById("remoteVideo").style.display="block";
+            }
+        });
+        // Listening for remote session description above
+
+        // Listen for remote ICE candidates below
+        ssRef.collection('calleeCandidates').onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(async change => {
+                if (change.type === 'added') {
+                    let data = change.doc.data();
+                    console.log(`Got new remote ICE candidate: ${JSON.stringify(data)}`);
+                    await screenPeerConnection.addIceCandidate(new RTCIceCandidate(data));
+                }
+            });
+        });
+        // Listen for remote ICE candidates above
+
+        //code for making connection above
+
+        var setWithMerge = meetingRef.collection('SchreenSharing').doc("statusRemote").set({
+            ssEnabled: true
+        }, {merge: true});
+    }
+    else{
+        alert("Meeting ID not fetched!");
+    }
+}
+
+//resume video call
+function videoCallResume(){
+    localStream.getVideoTracks()[0].enabled = true;
+    const stream = document.getElementById('localScreen').srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function(track) {
+        track.stop();
+    });
+
+    const db = firebase.firestore();
+    const meetingRef = db.collection('meetings').doc(meetingId);
+    var setWithMerge = meetingRef.collection('SchreenSharing').doc("statusRemote").set({
+        ssEnabled: false
+    }, {merge: true});
+
+    document.getElementById('localScreen').style.display = "none";
+    document.getElementById('localVideo').style.display = "block";
+    document.getElementById("ResumeVidCallButton").style.display="none";
+    document.getElementById("screenSharingButton").style.display="block";
+}
+//code for resuming video call above
 
 var w = window.innerWidth;
 var h = window.innerHeight;
