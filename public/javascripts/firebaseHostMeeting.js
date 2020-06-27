@@ -43,7 +43,6 @@ async function createRoom() {
     document.getElementById("callButton").style.display="none";
     document.getElementById("vidDisableButton").style.display="block";
     document.getElementById("micDisableButton").style.display="block";
-
     const db = firebase.firestore();
     const meetingRef = await db.collection('meetings').doc();
 
@@ -53,6 +52,11 @@ async function createRoom() {
 
 
     meetingId = meetingRef.id;
+
+    //starting cht func below
+    startChat(meetingId);
+    document.getElementById("chatToggleButton").style.display="block";
+
     meetingMetaId = meetingId;
     connectNewPeer(meetingMetaId);
     console.log(`Calgo created meeting with SDP offer. Meeting ID: ${meetingRef.id}`);
@@ -329,16 +333,109 @@ async function hangCall() {
     });
 }
 
-/**async function hangCallForAll() {
-    const db = firebase.firestore();
-    db.collection("meetings").doc(meetingId).set({
-        IsDisconnected: true
-    })
-        .then(function() {
-            hangCall();
-        })
-        .catch(function(error) {
-            console.error("Error writing document: ", error);
-        });
-}**/
+//group chat code below/////////////////////////////////////////////////////////////////////////////////
+
+function startChat(meetingId){
+//Load chats
+firebase.database().ref('chats/'+meetingId).on('value', function(snapshot) {
+    document.getElementById("loadChatMetaDiv").innerHTML = "";
+    snapshot.forEach(function(childSnapshot) {
+        var childKey = childSnapshot.key;
+        var childData = childSnapshot.val();
+
+        var chatDiv  =  document.createElement("h6");
+        var senderImg  =  document.createElement("img");
+        senderImg.src = childData.userProfilePic;
+        senderImg.width="35";
+        senderImg.height="35";
+        senderImg.classList.add("w3-round-xxlarge");
+        senderImg.classList.add("w3-margin-right");
+
+        var chatText = document.createTextNode(childData.chat);
+        chatDiv.classList.add("w3-padding");
+        chatDiv.classList.add("w3-round-large");
+        if(childData.uid==document.getElementById("uidHidden").textContent){
+            //chatText.classList.add("w3-pale-green");
+            chatDiv.classList.add("w3-right-align");
+        }
+        else{
+            chatDiv.appendChild(senderImg);
+        }
+        chatDiv.appendChild(chatText);
+
+        document.getElementById("loadChatMetaDiv").appendChild(chatDiv);
+        document.getElementById('loadChatMetaDiv').scrollTop = 9999999;
+    });
+});
+//  }
+}
+
+function saveChatToDb(chatText){
+    var chat = document.getElementById("chatTextTxtBox").value;
+    var userUid = document.getElementById("uidHidden").textContent;
+    var userPhotoURL = document.getElementById("photoUrlHidden").textContent;
+    var updates = {
+        uid: userUid,
+        chat: chat,
+        userProfilePic: userPhotoURL
+    };
+    var keyTimeStamp = Date.now();
+    firebase.database().ref('chats/'+meetingMetaId+'/'+keyTimeStamp).update(updates).then(function(){
+        document.getElementById("chatTextTxtBox").value="";
+    });
+
+}
+
+//signin using google
+function signinUsingGoogleBtn(){
+
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithRedirect(provider);
+    firebase.auth().getRedirectResult().then(function(result) {
+        if (result.credential) {
+            var token = result.credential.accessToken;
+
+        }
+        var user = result.user;
+//  document.getElementById("test").innerHTML=user;
+    }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+    });
+}
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        if (user != null) {
+            uid = user.uid;
+            document.getElementById("uidHidden").innerHTML=uid;
+            document.getElementById("photoUrlHidden").innerHTML=user.photoURL;
+            document.getElementById("chatbox").style.display="block";
+            document.getElementById("signupBtn").style.display="none";
+            document.getElementById("signedUpUserName").innerHTML = user.displayName+" 's Chats ";
+//                document.getElementById("userImg").src = user.photoURL;
+        }
+    } else {
+        document.getElementById("signupBtn").style.display="block";
+        document.getElementById("chatbox").style.display="none";
+        //document.getElementById("name").innerHTML="Hi User<hr>";
+    }
+});
+
+function signout(){
+    firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+    }).catch(function(error) {
+        // An error happened.
+    });
+}
+
+//group chat code above
 

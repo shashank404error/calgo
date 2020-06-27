@@ -40,7 +40,7 @@ router.get('/one-to-one-meeting-join', function(req, res,next){
 
 router.get('/join-a-meeting', function(req, res,next){
     var meetingId=req.query.meetingId;
-
+    console.log(meetingId);
     let cityRef = db.collection('meetings').doc(meetingId);
     let getDoc = cityRef.get()
         .then(doc => {
