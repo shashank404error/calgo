@@ -365,6 +365,7 @@ firebase.database().ref('chats/'+meetingId).on('value', function(snapshot) {
 
         document.getElementById("loadChatMetaDiv").appendChild(chatDiv);
         document.getElementById('loadChatMetaDiv').scrollTop = 9999999;
+        document.getElementById('chatImg').src="images/chatRecieved.png";
     });
 });
 //  }
@@ -437,5 +438,17 @@ function signout(){
     });
 }
 
+function closeChatModelWindow(){
+    document.getElementById('modelChat').style.display='none';
+    document.getElementById('chatImg').src="images/chat.png";
+}
+
+//enter button sends chat
+// Execute a function when the user releases a key on the keyboard
+function doit_onkeypress(event){
+    if (event.keyCode == 13 || event.which == 13){
+        saveChatToDb();
+    }
+}
 //group chat code above
 

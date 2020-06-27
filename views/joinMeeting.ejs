@@ -90,7 +90,7 @@
                         <div class="w3-cell"> <button id="vidDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="videoDisabledByUser()"><img src="images/vidEnable.png" style="width: 60px;height: 60px;"></button></div>
                             <div class="w3-cell"><button id="micEnableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioEnabledByUser()"><img src="images/micDisable.png" style="width: 60px;height: 60px;"></button></div>
                                 <div class="w3-cell"> <button id="micDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioDisabledByUser()"><img src="images/micEnable.png" style="width: 60px;height: 60px;"></button></div>
-                    <div class="w3-cell"><button type="button" id="chatToggleButton" class="w3-transparent w3-border-0" style="display: none;" onclick="document.getElementById('modelChat').style.display='block'"><img src="images/chat.png" style="width: 50px;height: 50px;"></button></div>
+                    <div class="w3-cell"><button type="button" id="chatToggleButton" class="w3-transparent w3-border-0" style="display: none;" onclick="document.getElementById('modelChat').style.display='block'"><img id="chatImg" src="images/chat.png" style="width: 50px;height: 50px;"></button></div>
                     <div class="w3-cell"><button id="hangupButton" class="w3-transparent w3-border-0" style="display: none;" onclick="hangCall()"><img src="images/hangupBtn.png" style="width: 60px;height: 60px;"></button></div>
                 </div></center>
         </div>
@@ -106,15 +106,15 @@
                     <div class="col-sm-12 col-12 col-xs-12" id="chatbox" style="border:2px;display:none;">
 
                         <div class="w3-container w3-green">
-                            <p id="signedUpUserName"></p><h5 onclick="signout()">Logout</h5><span onclick="document.getElementById('modelChat').style.display='none'" class="w3-button w3-display-topright w3-red w3-round-xxlarge">&times;</span>
+                            <p id="signedUpUserName"></p><h5 onclick="signout()">Logout</h5><span onclick="closeChatModelWindow()" class="w3-button w3-display-topright w3-red w3-round-xxlarge">&times;</span>
                         </div>
                         <div id="loadChatMetaDiv" class="w3-border w3-padding-small w3-white" style="height:380px;">
                         </div>
                         <div class="w3-container w3-border w3-white" style="height:50px;">
 
                             <div class="row" style="bottom:0px;position:absolute;width:90%;">
-                                <div class="col-sm-10 col-xs-10"><input class="w3-input w3-text-black" type="text" placeholder="Type a message" style="width:100%;" id="chatTextTxtBox"></div>
-                                <div class="col-sm-2 col-xs-2"><i class="fa fa-paper-plane-o" style="font-size:36px;color:green;" onclick="saveChatToDb()"></i></div>
+                                <div class="col-sm-10 col-10 col-xs-10"><input class="w3-input w3-text-black" type="text" placeholder="Type a message" style="width:100%;" id="chatTextTxtBox" onkeypress="javascript:doit_onkeypress(event);"></div>
+                                <div class="col-sm-2 col-2 col-xs-2"><i class="fa fa-paper-plane-o" style="font-size:36px;color:green;" onclick="saveChatToDb()"></i></div>
                             </div>
                         </div>
 
