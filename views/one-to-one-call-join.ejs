@@ -6,6 +6,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <head>
 
     <title><%=title%></title>
@@ -24,9 +29,13 @@
         html, body {
             height: 100%;
             margin: 0px;
+            font-size: 15px;
         }
         .logoFont {
             font-family: 'Sacramento', cursive;
+        }
+        #loadChatMetaDiv {
+            overflow: auto;
         }
     </style>
 </head>
@@ -40,6 +49,40 @@
 </div>
 
 <div class="w3-display-container w3-text-white" id="overlayOptionLayerForeground" style="position: relative; z-index: 2;height:100%;width:100%;">
+
+    <!---------------------------------chats code below---------------------------------->
+    <div id="modelChat" class="w3-modal">
+        <div class="w3-modal-content w3-card-4">
+            <span id="ifNotSignedinForClose" onclick="document.getElementById('modelChat').style.display='none'" class="w3-button w3-display-topright w3-red w3-round-xxlarge">&times;</span>
+
+            <div class="row">
+
+                <center><button onclick = "signinUsingGoogleBtn()" id="signupBtn" class="w3-btn w3-lime">Sign In using Google </button><h1 id="test"></h1></center>
+                <div class="col-sm-12 col-12 col-xs-12" id="chatbox" style="border:2px;display:none;">
+
+                    <div class="w3-container w3-green">
+                        <p id="signedUpUserName"></p><h5 onclick="signout()">Logout</h5><span onclick="closeChatModelWindow()" class="w3-button w3-display-topright w3-red w3-round-xxlarge">&times;</span>
+                    </div>
+                    <div id="loadChatMetaDiv" class="w3-border w3-padding-small w3-white" style="height:380px;">
+                    </div>
+                    <div class="w3-container w3-border w3-white" style="height:50px;">
+
+                        <div class="row" style="bottom:0px;position:absolute;width:90%;">
+                            <div class="col-sm-10 col-10 col-xs-10"><input class="w3-input w3-text-black" type="text" placeholder="Type a message" style="width:100%;" id="chatTextTxtBox" onkeypress="javascript:doit_onkeypress(event);"></div>
+                            <div class="col-sm-2 col-2 col-xs-2"><i class="fa fa-paper-plane-o" style="font-size:36px;color:green;" onclick="saveChatToDb()"></i></div>
+                        </div>
+                    </div>
+
+                    <h4 id="uidHidden" hidden></h4>
+                    <h4 id="photoUrlHidden" hidden></h4>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--------------------------------chat codes above-------------------------------------------------->
+
     <div class="w3-display-topleft w3-xxlarge w3-text-white logoFont">
         <b>CalGo</b>
     </div>
@@ -63,12 +106,16 @@
             <div class="w3-cell"> <button id="vidDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="videoDisabledByUser()"><img src="images/vidEnable.png" style="width: 50px;height: 50px;"></button></div>
             <div class="w3-cell"><button id="micEnableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioEnabledByUser()"><img src="images/micDisable.png" style="width: 50px;height: 50px;"></button></div>
             <div class="w3-cell"> <button id="micDisableButton" class="w3-transparent w3-border-0" style="display: none;" onclick="audioDisabledByUser()"><img src="images/micEnable.png" style="width: 50px;height: 50px;"></button></div>
-                <div class="w3-cell"><button id="screenSharingButton" class="w3-transparent w3-border-0" style="display: none" onclick="screenShare()"><img src="images/screenShareing.png" style="width: 50px;height: 50px;"></button></div>
+                <div class="w3-cell"><button id="screenSharingButton" class="w3-transparent w3-border-0 w3-hide-small" style="display: none" onclick="screenShare()"><img src="images/screenShareing.png" style="width: 50px;height: 50px;"></button></div>
                 <div class="w3-cell"><button id="ResumeVidCallButton" class="w3-transparent w3-border-0" style="display: none" onclick="videoCallResume()"><img src="images/stopScreenSharing.png" style="width: 50px;height: 50px;"></button></div>
-            <div class="w3-cell"><button id="hangupButton" class="w3-transparent w3-border-0" style="display: none" onclick="hangCall()"><img src="images/hangupBtn.png" style="width: 60px;height: 60px;"></button></div>
+                <div class="w3-cell"><button type="button" id="chatToggleButton" class="w3-transparent w3-border-0" style="display: none;" onclick="document.getElementById('modelChat').style.display='block'"><img id="chatImg" src="images/chat.png" style="width: 50px;height: 50px;"></button></div>
+                <div class="w3-cell"><button id="hangupButton" class="w3-transparent w3-border-0" style="display: none" onclick="hangCall()"><img src="images/hangupBtn.png" style="width: 60px;height: 60px;"></button></div>
             </div>
         </center>
     </div>
+
+
+
 </div>
 
 <!---<script src="/socket.io/socket.io.js"></script>
@@ -76,6 +123,8 @@
 <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase.js"></script>
 <script src="javascripts/one-to-one-join.js"></script>
 
 </body>
