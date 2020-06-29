@@ -90,7 +90,7 @@ async function createRoom() {
     //document.querySelector('#meetingIdForChatRoom').innerText = `Meeting ID - ${meetingRef.id}`;
 
     var meetingLink = "https://calgo1.herokuapp.com/one-to-one-meeting-join?meetingId="+meetingId;
-    var hrefLinkText = document.createTextNode(meetingLink);
+    var hrefLinkText = document.createTextNode("Copy & Share this link");
     var anchorTag = document.createElement("a");
     anchorTag.appendChild(hrefLinkText);
 
