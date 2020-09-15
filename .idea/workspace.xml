@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a7a3871-8a6e-4c8c-a63c-aa55df3d92c8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/images/callBtnGreen.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/hostMeeting.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/hostMeeting.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/joinMeeting.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/joinMeeting.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/one-to-one-call-host.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/one-to-one-call-host.ejs" afterDir="false" />
@@ -72,7 +70,7 @@
       <workItem from="1592263662756" duration="5913000" />
       <workItem from="1593255438743" duration="15370000" />
       <workItem from="1593398319161" duration="4794000" />
-      <workItem from="1600146683353" duration="1471000" />
+      <workItem from="1600146683353" duration="1711000" />
     </task>
     <servers />
   </component>
