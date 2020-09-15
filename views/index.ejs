@@ -55,13 +55,26 @@
       <button class="w3-button w3-transparent dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-gear" style="font-size:28px;"></i></button>
       <ul class="dropdown-menu dropdown-menu-right">
         <li id="logoutText" style="display: none;"><a href="#" onclick="signOutFromGoogleLogin()">Logout</a></li>
-        <li><a href="#">About Us</a></li>
+        <li><a href="#" onclick="document.getElementById('aboutUs').style.display='block'">About Us</a></li>
         <li><a href="#">Contact Us</a></li>
       </ul>
     </div>
   </div>
 </div>
 
+<div id="aboutUs" class="w3-modal">
+  <div class="w3-modal-content w3-card-4">
+    <header class="w3-container w3-transparent">
+      <span onclick="document.getElementById('aboutUs').style.display='none'" class="w3-button w3-red w3-display-topright">&times;</span>
+      <h2>About Us</h2>
+    </header>
+    <div class="w3-container">
+      <p><h4><b>Calgo - Calling on the go</b> was developed for a RFRF competition but soon started letting external parties use it as an API integratrion.<br> We provide three calling services viz. one-to-one, group call and broadcasting. We provide our own platform as a calling service but also our API to integrate with your own application.<br> We are a couple of programmers expressing ourselves through projects like these and when we code God code through us.</h4></p>
+      <p><h4>Connect with <a href="https://www.linkedin.com/in/shashank-prakash-a20587154/"><b>Shashank</b></a> and <a href="https://www.linkedin.com/in/mitali-345/"><b>Mitali</b></a> here. 🙏 Developers</h4></p>
+    </div>
+  </div>
+</div>
+</div>
 
 <!----------------------------- options for calling below-------------------------------------------->
 <!-- The overlay -->
