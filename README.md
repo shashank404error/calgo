@@ -1,4 +1,4 @@
-# CalGo - Calling On The Go (rfrf demo round)
+# CalGo - Calling On The Go
 This is a node.js application built on express framework. It uses webRTC protocol for the real-time communication. Google cloud firestore is used a a signalling server.
 
 ## Getting Started with CalGo
