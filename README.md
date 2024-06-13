@@ -33,6 +33,6 @@ Calgo uses a trickle tehnique to establish communication real fast. It uses webR
 intellij's webstorm
 
 ## Author
- Shashank Prakash| Mitali Bansal
+ Shashank Prakash | Mitali Bansal
  
 
